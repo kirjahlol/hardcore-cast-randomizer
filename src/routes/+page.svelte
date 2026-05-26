@@ -32,7 +32,7 @@
 			>
 		{/each}
 	</div>
-	<p>Click on the name of person to go to their wiki page.</p>
+	<p>Click on the name of a person to go to their wiki page.</p>
 	<button class="rounded-lg border p-2 hover:cursor-pointer" onclick={randomizePeople}
 		>Randomize</button
 	>
