@@ -20,11 +20,11 @@
 </script>
 
 <main class="flex flex-col items-center justify-center gap-2 p-4 sm:h-screen">
-	<h1 class="text-2xl font-semibold">Hardcore Cast Randomizer</h1>
+	<h1 class="text-center text-2xl font-semibold">Hardcore Cast Randomizer</h1>
 	<p>
 		Made by <a href="https://github.com/kirjahlol" class="text-blue-500 underline">kirjah</a> :)
 	</p>
-	<div class="flex flex-wrap gap-2">
+	<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
 		{#each people as person, i (i)}
 			<a
 				href="https://hardcore.wiki/wiki/{encodeURIComponent(person.title.replace(/ /g, '_'))}"
