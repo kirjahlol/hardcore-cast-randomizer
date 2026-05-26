@@ -19,8 +19,11 @@
 	}
 </script>
 
-<main class="flex flex-col items-center justify-center gap-2 sm:h-screen">
+<main class="flex flex-col items-center justify-center gap-2 p-4 sm:h-screen">
 	<h1 class="text-2xl font-semibold">Hardcore Cast Randomizer</h1>
+	<p>
+		Made by <a href="https://github.com/kirjahlol" class="text-blue-500 underline">kirjah</a> :)
+	</p>
 	<div class="flex flex-wrap gap-2">
 		{#each people as person, i (i)}
 			<a
@@ -29,6 +32,7 @@
 			>
 		{/each}
 	</div>
+	<p>Click on the name of person to go to their wiki page.</p>
 	<button class="rounded-lg border p-2 hover:cursor-pointer" onclick={randomizePeople}
 		>Randomize</button
 	>
