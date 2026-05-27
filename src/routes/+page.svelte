@@ -238,7 +238,7 @@
 				/>
 			</label>
 			<label for="highlighted-name" class="flex flex-col sm:flex-row items-center gap-2">
-				Highlighted name:
+				Highlighted name (optional):
 				<input
 					list="names"
 					id="highlighted-name"
