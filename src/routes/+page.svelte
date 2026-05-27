@@ -11,9 +11,9 @@
 	function randomizePeople() {
 		let shuffledMembers = [...data.members];
 
-		// Someone said not to fix this because it's funny but someone else pointed it out and now I feel like I need to fix it
+		// Someone said not to fix Category:Groups because it was funny but someone else pointed it out and now I feel like I need to fix it
 		shuffledMembers = shuffledMembers.filter((member) => {
-			return member.title !== 'Category:Groups';
+			return member.title !== 'Category:Groups' && member.title !== 'User:Charity';
 		});
 
 		for (let i = shuffledMembers.length - 1; i > 0; i--) {
