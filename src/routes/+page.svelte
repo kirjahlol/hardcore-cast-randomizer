@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Footer from '$components/Footer.svelte';
+	import Simulator from '$components/Simulator.svelte';
 	import type { PageProps } from './$types';
 	import { onMount } from 'svelte';
 
@@ -129,6 +130,9 @@
 				{/each}
 			</div>
 		{/if}
+		<hr class="w-full" />
+		<h1>Simulator:</h1>
+		<Simulator />
 	</main>
 	<hr />
 	<Footer />
