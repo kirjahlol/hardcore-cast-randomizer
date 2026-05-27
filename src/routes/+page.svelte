@@ -31,44 +31,52 @@
 	});
 </script>
 
-<main class="flex flex-col items-center gap-4 p-4 pt-16">
-	<div class="flex items-center gap-2">
-		<img src="/favicon.svg" alt="Hardcore logo" class="size-12" />
-		<h1 class="text-center text-4xl font-semibold">Hardcore Cast Randomizer</h1>
-	</div>
-	<p>
-		Made by <a href="https://github.com/kirjahlol" class="text-ctp-blue underline">kirjah</a> ❤️
-	</p>
-	<label class="flex items-center gap-2">
-		<input
-			type="number"
-			bind:value={numberOfPeople}
-			min="1"
-			max="30"
-			onchange={randomizePeople}
-			class="border border-ctp-surface0 bg-ctp-mantle rounded-lg p-2 focus:outline-none"
-		/>
-		<input
-			type="range"
-			bind:value={numberOfPeople}
-			min="1"
-			max="30"
-			onchange={randomizePeople}
-			class="accent-ctp-blue"
-		/>
-	</label>
-	<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap justify-center">
-		{#each people as person, i (i)}
-			<a
-				href="https://hardcore.wiki/wiki/{encodeURIComponent(person.title.replace(/ /g, '_'))}"
-				class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center"
-				><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
-			>
-		{/each}
-	</div>
-	<p class="text-center">Click on the name of a person to go to their wiki page.</p>
-	<button
-		class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
-		onclick={randomizePeople}>Randomize</button
-	>
-</main>
+<div class="p-4 pt-16 flex flex-col gap-4">
+	<main class="flex flex-col items-center gap-4 min-h-screen">
+		<div class="flex items-center gap-2">
+			<img src="/favicon.svg" alt="Hardcore logo" class="size-12" />
+			<h1 class="text-center text-4xl font-semibold">Hardcore Cast Randomizer</h1>
+		</div>
+		<label class="flex items-center gap-2">
+			<input
+				type="number"
+				bind:value={numberOfPeople}
+				min="1"
+				max="30"
+				onchange={randomizePeople}
+				class="border border-ctp-surface0 bg-ctp-mantle rounded-lg p-2 focus:outline-none"
+			/>
+			<input
+				type="range"
+				bind:value={numberOfPeople}
+				min="1"
+				max="30"
+				onchange={randomizePeople}
+				class="accent-ctp-blue"
+			/>
+		</label>
+		<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap justify-center">
+			{#each people as person, i (i)}
+				<a
+					href="https://hardcore.wiki/wiki/{encodeURIComponent(person.title.replace(/ /g, '_'))}"
+					class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center"
+					><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
+				>
+			{/each}
+		</div>
+		<p class="text-center">Click on the name of a person to go to their wiki page.</p>
+		<button
+			class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
+			onclick={randomizePeople}>Randomize</button
+		>
+	</main>
+	<hr />
+	<footer class="flex justify-between">
+		<p>
+			Made by <a href="https://github.com/kirjahlol" class="text-ctp-blue underline">kirjah</a> ❤️
+		</p>
+		<a href="https://github.com/kirjahlol/hardcore-cast-randomizer" class="text-ctp-blue underline">
+			Source code
+		</a>
+	</footer>
+</div>
