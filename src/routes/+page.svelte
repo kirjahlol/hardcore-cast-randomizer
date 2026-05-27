@@ -39,12 +39,29 @@
 			<h1 class="text-center text-4xl font-semibold">Hardcore Cast Randomizer</h1>
 		</div>
 		<label class="flex items-center gap-2">
+			Number of cast members:
 			<input
 				type="number"
 				bind:value={numberOfPeople}
 				min="1"
 				max="30"
-				onchange={randomizePeople}
+				oninput={(event) => {
+					const currentTarget = event.currentTarget;
+
+					if (!currentTarget.value) return;
+
+					if (parseInt(currentTarget.value) > 30) {
+						currentTarget.value = '30';
+						numberOfPeople = 30;
+					}
+
+					if (parseInt(currentTarget.value) < 1) {
+						currentTarget.value = '1';
+						numberOfPeople = 1;
+					}
+
+					randomizePeople();
+				}}
 				class="border border-ctp-surface0 bg-ctp-mantle rounded-lg p-2 focus:outline-none"
 			/>
 			<input
@@ -52,7 +69,7 @@
 				bind:value={numberOfPeople}
 				min="1"
 				max="30"
-				onchange={randomizePeople}
+				oninput={randomizePeople}
 				class="accent-ctp-blue"
 			/>
 		</label>
