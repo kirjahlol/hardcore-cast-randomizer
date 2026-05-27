@@ -55,11 +55,11 @@
 					{ episode: Math.floor(numberOfEpisodes * 0.3), message: 'The Nether was entered' },
 					{
 						episode: Math.floor(numberOfEpisodes * 0.5),
-						message: 'All the Blaze Rods were gotten'
+						message: 'All the Blaze Rods were collected'
 					},
 					{
 						episode: Math.floor(numberOfEpisodes * 0.7),
-						message: 'The Eyes of Ender were crafted'
+						message: 'All the Ender Pearls were collected'
 					}
 				],
 				deaths: [
