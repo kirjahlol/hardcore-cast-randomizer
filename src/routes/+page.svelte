@@ -55,6 +55,11 @@
 				class="accent-ctp-blue"
 			/>
 		</label>
+		<button
+			class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
+			onclick={randomizePeople}>Randomize</button
+		>
+		<p class="text-center">Click on the name of a person to go to their wiki page.</p>
 		<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap justify-center">
 			{#each people as person, i (i)}
 				<a
@@ -64,11 +69,6 @@
 				>
 			{/each}
 		</div>
-		<p class="text-center">Click on the name of a person to go to their wiki page.</p>
-		<button
-			class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
-			onclick={randomizePeople}>Randomize</button
-		>
 	</main>
 	<hr />
 	<footer class="flex justify-between">
