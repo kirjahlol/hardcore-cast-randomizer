@@ -23,7 +23,7 @@
 	let games = ['Minecraft', 'Terraria'];
 	let game = $state('Minecraft');
 	let numberOfEpisodes = $state(10);
-	let deathOdds = $state(0.5);
+	let deathOdds = $state(0.1);
 	let isSimulationFinished = $state(false);
 	let events: Event[] = $state([]);
 	let survivors: string[] = $state([]);
@@ -123,28 +123,28 @@
 				});
 			}
 
-			const willDeathHappen = Math.random() < deathOdds;
-			if (willDeathHappen) {
-				const randomIndex = Math.floor(Math.random() * aliveCastMembers.length);
-				const person = aliveCastMembers[randomIndex];
+			let deathsThisEpisode: string[] = [];
 
-				const possibleDeaths = activeGame.deaths.filter((death) =>
-					death.levels.includes(progressionLevel)
-				);
+			for (const person of aliveCastMembers) {
+				if (Math.random() < deathOdds) {
+					const possibleDeaths = activeGame.deaths.filter((death) =>
+						death.levels.includes(progressionLevel)
+					);
 
-				if (possibleDeaths.length > 0) {
-					const death = possibleDeaths[Math.floor(Math.random() * possibleDeaths.length)];
-
-					events.push({
-						eventType: 'death',
-						episode: currentEpisode,
-						person,
-						message: death.message
-					});
-
-					aliveCastMembers.splice(randomIndex, 1);
+					if (possibleDeaths.length > 0) {
+						const death = possibleDeaths[Math.floor(Math.random() * possibleDeaths.length)];
+						events.push({
+							eventType: 'death',
+							episode: currentEpisode,
+							person,
+							message: death.message
+						});
+						deathsThisEpisode.push(person);
+					}
 				}
 			}
+
+			aliveCastMembers = aliveCastMembers.filter((person) => !deathsThisEpisode.includes(person));
 		}
 
 		survivors = aliveCastMembers;
