@@ -267,7 +267,7 @@
 			<p class="text-center font-semibold text-ctp-red">{data.error}</p>
 		{:else}
 			<p class="text-center">Click on the name of a person to go to their wiki page.</p>
-			<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap justify-center">
+			<div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap justify-center">
 				{#each people as person, i (i)}
 					{#if person.title === highlightedName}
 						<a
