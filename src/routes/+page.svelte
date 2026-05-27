@@ -202,7 +202,7 @@
 		<div
 			class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-lg border border-ctp-surface0"
 		>
-			<label class="flex items-center gap-2">
+			<label class="flex items-center gap-2 flex-col sm:flex-row">
 				Number of cast members:
 				<input
 					type="number"
@@ -237,8 +237,8 @@
 					class="accent-ctp-blue"
 				/>
 			</label>
-			<label for="highlighted-name"
-				>Highlighted name:
+			<label for="highlighted-name" class="flex flex-col sm:flex-row items-center gap-2">
+				Highlighted name:
 				<input
 					list="names"
 					id="highlighted-name"
@@ -293,7 +293,7 @@
 			<div
 				class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-lg border border-ctp-surface0"
 			>
-				<div class="flex gap-2">
+				<div class="flex gap-2 items-center flex-col sm:flex-row">
 					Game:
 					{#each games as gameName, i (i)}
 						<label>
@@ -309,7 +309,7 @@
 						</label>
 					{/each}
 				</div>
-				<label class="flex items-center gap-2">
+				<label class="flex items-center gap-2 flex-col sm:flex-row">
 					Number of episodes:
 					<input
 						type="number"
@@ -344,7 +344,7 @@
 						class="accent-ctp-blue"
 					/>
 				</label>
-				<label class="flex items-center gap-2">
+				<label class="flex items-center gap-2 flex-col sm:flex-row">
 					Chance of death per episode:
 					<input
 						type="number"
