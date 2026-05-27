@@ -9,7 +9,12 @@
 	let people: typeof data.members = $state([]);
 
 	function randomizePeople() {
-		const shuffledMembers = [...data.members];
+		let shuffledMembers = [...data.members];
+
+		// Someone said not to fix this because it's funny but someone else pointed it out and now I feel like I need to fix it
+		shuffledMembers = shuffledMembers.filter((member) => {
+			return member.title !== 'Category:Groups';
+		});
 
 		for (let i = shuffledMembers.length - 1; i > 0; i--) {
 			const arrayBuffer = new Uint32Array(1);
