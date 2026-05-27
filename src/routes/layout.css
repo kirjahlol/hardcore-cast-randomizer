@@ -15,3 +15,7 @@ body {
 a {
 	@apply text-ctp-blue underline;
 }
+
+hr {
+	@apply my-4;
+}

@@ -405,6 +405,6 @@
 			{/if}
 		{/if}
 	</main>
-	<hr />
+	<hr class="mb-0!" />
 	<Footer />
 </div>

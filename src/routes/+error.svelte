@@ -10,10 +10,10 @@
 		<h2 class="text-lg font-medium text-center">{page.error?.message}</h2>
 		<a
 			href={resolve('/')}
-			class="py-2 px-4 rounded-lg bg-ctp-blue text-center text-ctp-base hover:bg-ctp-blue-700 cursor-pointer"
+			class="py-2 px-4 rounded-lg bg-ctp-blue text-center text-ctp-base! no-underline! hover:bg-ctp-blue-700 cursor-pointer"
 			>&leftarrow; Back to home</a
 		>
 	</main>
-	<hr />
+	<hr class="mb-0!" />
 	<Footer />
 </div>
