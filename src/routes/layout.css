@@ -1,10 +1,13 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter/wght.css';
+@import '@catppuccin/tailwindcss/mocha.css';
+
+@custom-variant dark (&:where(.mocha, .mocha *));
 
 @theme {
 	--font-sans: 'Inter Variable', sans-serif;
 }
 
 body {
-	@apply dark:bg-zinc-900 dark:text-white;
+	@apply bg-ctp-base text-ctp-text;
 }
