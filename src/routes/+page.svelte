@@ -200,7 +200,7 @@
 			<h1 class="text-center text-4xl font-semibold">Hardcore Cast Randomizer</h1>
 		</div>
 		<div
-			class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-md border border-ctp-surface0"
+			class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-lg border border-ctp-surface0"
 		>
 			<label class="flex items-center gap-2">
 				Number of cast members:
@@ -226,7 +226,7 @@
 
 						randomizePeople();
 					}}
-					class="border border-ctp-surface0 bg-ctp-crust rounded-lg p-2 focus:outline-none"
+					class="border border-ctp-surface0 bg-ctp-crust rounded-md p-2 focus:outline-none"
 				/>
 				<input
 					type="range"
@@ -244,7 +244,7 @@
 					id="highlighted-name"
 					name="highlighted-name"
 					bind:value={highlightedName}
-					class="focus:outline-none p-2 rounded-lg border border-ctp-surface0 bg-ctp-crust"
+					class="focus:outline-none p-2 rounded-md border border-ctp-surface0 bg-ctp-crust"
 				/>
 			</label>
 			<datalist id="names">
@@ -259,7 +259,7 @@
 				<a href="https://hardcore.wiki/wiki/Hardcore_Wiki">Hardcore Wiki</a>)
 			</p>
 			<button
-				class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
+				class="rounded-md bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
 				onclick={randomizePeople}>Randomize</button
 			>
 		</div>
@@ -291,7 +291,7 @@
 			<hr class="w-full" />
 			<h1 class="font-semibold text-4xl text-center">Hardcore Simulator</h1>
 			<div
-				class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-md border border-ctp-surface0"
+				class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-lg border border-ctp-surface0"
 			>
 				<div class="flex gap-2">
 					Game:
@@ -333,7 +333,7 @@
 
 							randomizeEvents();
 						}}
-						class="border border-ctp-surface0 bg-ctp-crust rounded-lg p-2 focus:outline-none"
+						class="border border-ctp-surface0 bg-ctp-crust rounded-md p-2 focus:outline-none"
 					/>
 					<input
 						type="range"
@@ -369,7 +369,7 @@
 
 							randomizeEvents();
 						}}
-						class="border border-ctp-surface0 bg-ctp-crust rounded-lg p-2 focus:outline-none"
+						class="border border-ctp-surface0 bg-ctp-crust rounded-md p-2 focus:outline-none"
 					/>
 					<input
 						type="range"
@@ -382,7 +382,7 @@
 					/>
 				</label>
 				<button
-					class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
+					class="rounded-md bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
 					onclick={randomizeEvents}>Randomize</button
 				>
 			</div>
