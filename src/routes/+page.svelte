@@ -56,7 +56,7 @@
 		{#each people as person, i (i)}
 			<a
 				href="https://hardcore.wiki/wiki/{encodeURIComponent(person.title.replace(/ /g, '_'))}"
-				class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4"
+				class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150"
 				>{person.title}</a
 			>
 		{/each}
