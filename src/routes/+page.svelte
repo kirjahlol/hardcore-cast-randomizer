@@ -35,12 +35,12 @@
 		<input
 			type="number"
 			bind:value={numberOfPeople}
-			min="0"
+			min="1"
 			max="30"
 			onchange={randomizePeople}
 			class="border rounded-lg p-2 focus:outline-none"
 		/>
-		<input type="range" bind:value={numberOfPeople} min="0" max="30" onchange={randomizePeople} />
+		<input type="range" bind:value={numberOfPeople} min="1" max="30" onchange={randomizePeople} />
 	</label>
 	<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap justify-center">
 		{#each people as person, i (i)}
