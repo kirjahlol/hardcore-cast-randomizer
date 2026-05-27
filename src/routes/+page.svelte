@@ -54,7 +54,7 @@
 				milestones: [
 					{ episode: Math.floor(numberOfEpisodes * 0.3), message: 'The Nether was entered' },
 					{
-						episode: Math.floor(numberOfEpisodes * 0.5),
+						episode: Math.floor(numberOfEpisodes * 0.4),
 						message: 'All the Blaze Rods were collected'
 					},
 					{
