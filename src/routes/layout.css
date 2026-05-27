@@ -17,5 +17,5 @@ a {
 }
 
 hr {
-	@apply my-4;
+	@apply my-4 text-ctp-surface0;
 }
