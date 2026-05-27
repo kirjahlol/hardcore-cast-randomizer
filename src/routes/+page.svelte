@@ -4,7 +4,7 @@
 
 	let { data }: PageProps = $props();
 
-	let numberOfPeople = $state(30);
+	let numberOfPeople = $state(8);
 
 	let people: typeof data.members = $state([]);
 
