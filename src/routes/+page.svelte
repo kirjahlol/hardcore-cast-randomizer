@@ -86,16 +86,20 @@
 			class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
 			onclick={randomizePeople}>Randomize</button
 		>
-		<p class="text-center">Click on the name of a person to go to their wiki page.</p>
-		<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap justify-center">
-			{#each people as person, i (i)}
-				<a
-					href="https://hardcore.wiki/wiki/{encodeURIComponent(person.title.replace(/ /g, '_'))}"
-					class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-text! no-underline!"
-					><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
-				>
-			{/each}
-		</div>
+		{#if data.error}
+			<p class="text-center font-semibold text-ctp-red">{data.error}</p>
+		{:else}
+			<p class="text-center">Click on the name of a person to go to their wiki page.</p>
+			<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap justify-center">
+				{#each people as person, i (i)}
+					<a
+						href="https://hardcore.wiki/wiki/{encodeURIComponent(person.title.replace(/ /g, '_'))}"
+						class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-text! no-underline!"
+						><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
+					>
+				{/each}
+			</div>
+		{/if}
 	</main>
 	<hr />
 	<Footer />
