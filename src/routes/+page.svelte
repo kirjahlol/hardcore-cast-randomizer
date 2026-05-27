@@ -1,8 +1,13 @@
 <script lang="ts">
 	import Footer from '$components/Footer.svelte';
-	import Simulator from '$components/Simulator.svelte';
 	import type { PageProps } from './$types';
 	import { onMount } from 'svelte';
+
+	interface Event {
+		episode: number;
+		person?: string;
+		causeOfDeath?: string;
+	}
 
 	let { data }: PageProps = $props();
 
@@ -14,6 +19,15 @@
 	let poolSize = $state(0);
 	let people: typeof data.members = $state([]);
 
+	let games = ['Minecraft', 'Terraria'];
+	let game = $state('Minecraft');
+	let numberOfEpisodes = $state(10);
+	let odds = $state(0.5);
+
+	let events: Event[] = $state([]);
+	let survivors: string[] = $state([]);
+	let isSimulationFinished = $state(false);
+
 	function randomizePeople() {
 		for (let i = shuffledMembers.length - 1; i > 0; i--) {
 			const arrayBuffer = new Uint32Array(1);
@@ -24,6 +38,81 @@
 
 		poolSize = shuffledMembers.length;
 		people = shuffledMembers.slice(0, Math.min(numberOfPeople, shuffledMembers.length));
+
+		randomizeEvents();
+	}
+
+	function randomizeEvents() {
+		events = [];
+		isSimulationFinished = false;
+
+		let aliveCastMembers: string[] = [...people].map((person) => person.title);
+
+		const minecraftDeathMessages = [
+			'was killed by a Zombie',
+			'was killed by a Baby Zombie',
+			'was killed by a Skeleton',
+			'was killed by a Spider',
+			'was blown up by a Creeper',
+			'was killed by a Creeper',
+			'was killed by an Enderman',
+			'was fireballed by a Blaze',
+			'was killed by a Wither Skeleton',
+			'fell to their death'
+		];
+
+		const terrariaDeathMessages = [
+			'was killed by a Slime',
+			'was killed by a Zombie',
+			'was killed by a Skeleton',
+			'accidentally jumped of a minecart track',
+			'fell to their death',
+			'was crushed by a boulder',
+			'was blown up by an explosive trap',
+			'drowned'
+		];
+
+		for (let i = 0; i < numberOfEpisodes; i++) {
+			if (aliveCastMembers.length === 0) break;
+
+			let willEventHappen = Math.random() < odds;
+
+			if (willEventHappen) {
+				const randomIndex = Math.floor(Math.random() * aliveCastMembers.length);
+				const person = aliveCastMembers[randomIndex];
+
+				let causeOfDeath = '';
+				switch (game) {
+					case 'Minecraft':
+						causeOfDeath =
+							minecraftDeathMessages[Math.floor(Math.random() * minecraftDeathMessages.length)];
+						break;
+					case 'Terraria':
+						causeOfDeath =
+							terrariaDeathMessages[Math.floor(Math.random() * terrariaDeathMessages.length)];
+						break;
+				}
+
+				events.push({
+					episode: i + 1,
+					person,
+					causeOfDeath
+				});
+
+				aliveCastMembers.splice(randomIndex, 1);
+			}
+		}
+
+		survivors = aliveCastMembers;
+		isSimulationFinished = true;
+	}
+
+	function formatPeopleList(people: string[]): string {
+		if (people.length === 1) return people[0];
+		if (people.length === 2) return `${people[0]} and ${people[1]}`;
+
+		const allButLast = people.slice(0, -1).join(', ');
+		return `${allButLast}, and ${people[people.length - 1]}`;
 	}
 
 	onMount(() => {
@@ -129,10 +218,113 @@
 					{/if}
 				{/each}
 			</div>
+			<hr class="w-full" />
+			<h1 class="font-semibold text-4xl text-center">Simulator</h1>
+			<div class="flex gap-2">
+				Game:
+				{#each games as gameName, i (i)}
+					<label>
+						<input
+							type="radio"
+							name="games"
+							value={gameName}
+							bind:group={game}
+							onchange={randomizeEvents}
+							class="accent-ctp-blue"
+						/>
+						{gameName}
+					</label>
+				{/each}
+			</div>
+			<label class="flex items-center gap-2">
+				Number of episodes:
+				<input
+					type="number"
+					bind:value={numberOfEpisodes}
+					min="1"
+					max="20"
+					oninput={(event) => {
+						const currentTarget = event.currentTarget;
+
+						if (!currentTarget.value) return;
+
+						if (parseInt(currentTarget.value) > 20) {
+							currentTarget.value = '20';
+							numberOfEpisodes = 20;
+						}
+
+						if (parseInt(currentTarget.value) < 1) {
+							currentTarget.value = '1';
+							numberOfEpisodes = 1;
+						}
+
+						randomizeEvents();
+					}}
+					class="border border-ctp-surface0 bg-ctp-mantle rounded-lg p-2 focus:outline-none"
+				/>
+				<input
+					type="range"
+					bind:value={numberOfEpisodes}
+					min="1"
+					max="20"
+					oninput={randomizeEvents}
+					class="accent-ctp-blue"
+				/>
+			</label>
+			<label class="flex items-center gap-2">
+				Chances of death:
+				<input
+					type="number"
+					bind:value={odds}
+					min="0"
+					max="1"
+					step="0.01"
+					oninput={(event) => {
+						const currentTarget = event.currentTarget;
+
+						if (!currentTarget.value) return;
+
+						if (parseInt(currentTarget.value) > 1) {
+							currentTarget.value = '1';
+							odds = 1;
+						}
+
+						if (parseInt(currentTarget.value) < 0) {
+							currentTarget.value = '0';
+							odds = 0;
+						}
+
+						randomizeEvents();
+					}}
+					class="border border-ctp-surface0 bg-ctp-mantle rounded-lg p-2 focus:outline-none"
+				/>
+				<input
+					type="range"
+					bind:value={odds}
+					min="0"
+					max="1"
+					step="0.01"
+					oninput={randomizeEvents}
+					class="accent-ctp-blue"
+				/>
+			</label>
+			{#if isSimulationFinished}
+				<div class="flex flex-col text-center">
+					{#each events as event, i (i)}
+						<div>
+							<p>In episode {event.episode}, {event.person} {event.causeOfDeath}.</p>
+						</div>
+					{/each}
+					{#if survivors.length > 0}
+						<p class="font-semibold">
+							{formatPeopleList(survivors)} completed the goal!
+						</p>
+					{:else}
+						<p class="font-semibold">Everyone died before the goal was completed...</p>
+					{/if}
+				</div>
+			{/if}
 		{/if}
-		<hr class="w-full" />
-		<h1>Simulator:</h1>
-		<Simulator />
 	</main>
 	<hr />
 	<Footer />
