@@ -4,9 +4,10 @@
 	import { onMount } from 'svelte';
 
 	interface Event {
-		episode: number;
+		eventType: 'progression' | 'death' | 'victory' | 'failure';
+		episode?: number;
 		person?: string;
-		causeOfDeath?: string;
+		message?: string;
 	}
 
 	let { data }: PageProps = $props();
@@ -22,11 +23,10 @@
 	let games = ['Minecraft', 'Terraria'];
 	let game = $state('Minecraft');
 	let numberOfEpisodes = $state(10);
-	let odds = $state(0.5);
-
+	let deathOdds = $state(0.5);
+	let isSimulationFinished = $state(false);
 	let events: Event[] = $state([]);
 	let survivors: string[] = $state([]);
-	let isSimulationFinished = $state(false);
 
 	function randomizePeople() {
 		for (let i = shuffledMembers.length - 1; i > 0; i--) {
@@ -47,63 +47,129 @@
 		isSimulationFinished = false;
 
 		let aliveCastMembers: string[] = [...people].map((person) => person.title);
+		let progressionLevel = 0;
 
-		const minecraftDeathMessages = [
-			'was killed by a Zombie',
-			'was killed by a Baby Zombie',
-			'was killed by a Skeleton',
-			'was killed by a Spider',
-			'was blown up by a Creeper',
-			'was killed by a Creeper',
-			'was killed by an Enderman',
-			'was fireballed by a Blaze',
-			'was killed by a Wither Skeleton',
-			'fell to their death'
-		];
+		const gameEvents = {
+			Minecraft: {
+				milestones: [
+					{ episode: Math.floor(numberOfEpisodes * 0.3), message: 'The Nether was entered' },
+					{
+						episode: Math.floor(numberOfEpisodes * 0.5),
+						message: 'All the Blaze Rods were gotten'
+					},
+					{
+						episode: Math.floor(numberOfEpisodes * 0.7),
+						message: 'The Eyes of Ender were crafted'
+					}
+				],
+				deaths: [
+					{ message: 'was killed by a Zombie', levels: [0, 2, 3] },
+					{ message: 'was killed by a Baby Zombie', levels: [0, 2, 3] },
+					{ message: 'was killed by a Skeleton', levels: [0, 2, 3] },
+					{ message: 'was blown up by a Creeper', levels: [0, 2, 3] },
+					{ message: 'was killed by a Spider', levels: [0, 2, 3] },
+					{ message: 'fell to their death', levels: [0, 2, 3] },
+					{ message: 'drowned', levels: [0, 2, 3] },
+					{ message: 'was killed by an Enderman', levels: [0, 2] },
+					{ message: 'was fireballed by a Blaze', levels: [1] },
+					{ message: 'was killed by a Wither Skeleton', levels: [1] }
+				]
+			},
+			Terraria: {
+				milestones: [
+					{
+						episode: Math.floor(numberOfEpisodes * 0.3),
+						message: 'The Eye of Cthulhu was defeated'
+					},
+					{
+						episode: Math.floor(numberOfEpisodes * 0.5),
+						message: 'The Eater of Worlds was defeated'
+					},
+					{
+						episode: Math.floor(numberOfEpisodes * 0.7),
+						message: 'Skeletron was defeated'
+					}
+				],
+				deaths: [
+					{ message: 'was killed by a Slime', levels: [0, 1, 2, 3] },
+					{ message: 'was killed by a Zombie', levels: [0, 1, 2, 3] },
+					{ message: 'was killed by a Skeleton', levels: [0, 1, 2, 3] },
+					{ message: 'was killed by a Hornet', levels: [0, 1, 2, 3] },
+					{ message: 'accidentally jumped of a minecart track', levels: [0, 1, 2, 3] },
+					{ message: 'fell to their death', levels: [0, 1, 2, 3] },
+					{ message: 'was crushed by a boulder', levels: [0, 1, 2, 3] },
+					{ message: 'was blown up by an explosive trap', levels: [0, 1, 2, 3] },
+					{ message: 'drowned', levels: [0, 1, 2, 3] }
+				]
+			}
+		};
 
-		const terrariaDeathMessages = [
-			'was killed by a Slime',
-			'was killed by a Zombie',
-			'was killed by a Skeleton',
-			'accidentally jumped of a minecart track',
-			'fell to their death',
-			'was crushed by a boulder',
-			'was blown up by an explosive trap',
-			'drowned'
-		];
+		const activeGame = gameEvents[game as keyof typeof gameEvents];
 
 		for (let i = 0; i < numberOfEpisodes; i++) {
 			if (aliveCastMembers.length === 0) break;
 
-			let willEventHappen = Math.random() < odds;
+			const currentEpisode = i + 1;
 
-			if (willEventHappen) {
+			const milestone = activeGame.milestones.find(
+				(milestone) => milestone.episode === currentEpisode
+			);
+			if (milestone) {
+				progressionLevel++;
+
+				events.push({
+					eventType: 'progression',
+					message: milestone.message
+				});
+			}
+
+			const willDeathHappen = Math.random() < deathOdds;
+			if (willDeathHappen) {
 				const randomIndex = Math.floor(Math.random() * aliveCastMembers.length);
 				const person = aliveCastMembers[randomIndex];
 
-				let causeOfDeath = '';
-				switch (game) {
-					case 'Minecraft':
-						causeOfDeath =
-							minecraftDeathMessages[Math.floor(Math.random() * minecraftDeathMessages.length)];
-						break;
-					case 'Terraria':
-						causeOfDeath =
-							terrariaDeathMessages[Math.floor(Math.random() * terrariaDeathMessages.length)];
-						break;
+				const possibleDeaths = activeGame.deaths.filter((death) =>
+					death.levels.includes(progressionLevel)
+				);
+
+				if (possibleDeaths.length > 0) {
+					const death = possibleDeaths[Math.floor(Math.random() * possibleDeaths.length)];
+
+					events.push({
+						eventType: 'death',
+						episode: currentEpisode,
+						person,
+						message: death.message
+					});
+
+					aliveCastMembers.splice(randomIndex, 1);
 				}
-
-				events.push({
-					episode: i + 1,
-					person,
-					causeOfDeath
-				});
-
-				aliveCastMembers.splice(randomIndex, 1);
 			}
 		}
 
 		survivors = aliveCastMembers;
+		if (aliveCastMembers.length > 0) {
+			switch (game) {
+				case 'Minecraft':
+					events.push({
+						eventType: 'victory',
+						message: 'defeated the Ender Dragon'
+					});
+					break;
+				case 'Terraria':
+					events.push({
+						eventType: 'victory',
+						message: 'defeated the Wall of Flesh'
+					});
+					break;
+			}
+		} else {
+			events.push({
+				eventType: 'failure',
+				message: 'Everyone died before the goal was completed'
+			});
+		}
+
 		isSimulationFinished = true;
 	}
 
@@ -129,7 +195,7 @@
 
 <div class="p-4 pt-16 flex flex-col gap-4">
 	<main class="flex flex-col items-center gap-4 min-h-screen">
-		<div class="flex items-center gap-2">
+		<div class="flex flex-col items-center gap-4">
 			<img src="/favicon.svg" alt="Hardcore logo" class="size-12" />
 			<h1 class="text-center text-4xl font-semibold">Hardcore Cast Randomizer</h1>
 		</div>
@@ -279,10 +345,10 @@
 					/>
 				</label>
 				<label class="flex items-center gap-2">
-					Chances of death:
+					Chance of death per episode:
 					<input
 						type="number"
-						bind:value={odds}
+						bind:value={deathOdds}
 						min="0"
 						max="1"
 						step="0.01"
@@ -293,12 +359,12 @@
 
 							if (parseInt(currentTarget.value) > 1) {
 								currentTarget.value = '1';
-								odds = 1;
+								deathOdds = 1;
 							}
 
 							if (parseInt(currentTarget.value) < 0) {
 								currentTarget.value = '0';
-								odds = 0;
+								deathOdds = 0;
 							}
 
 							randomizeEvents();
@@ -307,7 +373,7 @@
 					/>
 					<input
 						type="range"
-						bind:value={odds}
+						bind:value={deathOdds}
 						min="0"
 						max="1"
 						step="0.01"
@@ -315,21 +381,26 @@
 						class="accent-ctp-blue"
 					/>
 				</label>
+				<button
+					class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
+					onclick={randomizeEvents}>Randomize</button
+				>
 			</div>
 			{#if isSimulationFinished}
 				<div class="flex flex-col text-center">
 					{#each events as event, i (i)}
-						<div>
-							<p>In episode {event.episode}, {event.person} {event.causeOfDeath}.</p>
-						</div>
+						{#if event.eventType === 'death'}
+							<div>
+								<p>In episode {event.episode}, {event.person} {event.message}.</p>
+							</div>
+						{:else if event.eventType === 'progression'}
+							<p class="font-semibold">{event.message}!</p>
+						{:else if event.eventType === 'victory'}
+							<p class="font-semibold">{formatPeopleList(survivors)} {event.message}!</p>
+						{:else if event.eventType === 'failure'}
+							<p class="font-semibold">{event.message}...</p>
+						{/if}
 					{/each}
-					{#if survivors.length > 0}
-						<p class="font-semibold">
-							{formatPeopleList(survivors)} completed the goal!
-						</p>
-					{:else}
-						<p class="font-semibold">Everyone died before the goal was completed...</p>
-					{/if}
 				</div>
 			{/if}
 		{/if}
