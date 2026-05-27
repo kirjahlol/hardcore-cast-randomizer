@@ -133,66 +133,70 @@
 			<img src="/favicon.svg" alt="Hardcore logo" class="size-12" />
 			<h1 class="text-center text-4xl font-semibold">Hardcore Cast Randomizer</h1>
 		</div>
-		<label class="flex items-center gap-2">
-			Number of cast members:
-			<input
-				type="number"
-				bind:value={numberOfPeople}
-				min="1"
-				max="30"
-				oninput={(event) => {
-					const currentTarget = event.currentTarget;
-
-					if (!currentTarget.value) return;
-
-					if (parseInt(currentTarget.value) > 30) {
-						currentTarget.value = '30';
-						numberOfPeople = 30;
-					}
-
-					if (parseInt(currentTarget.value) < 1) {
-						currentTarget.value = '1';
-						numberOfPeople = 1;
-					}
-
-					randomizePeople();
-				}}
-				class="border border-ctp-surface0 bg-ctp-mantle rounded-lg p-2 focus:outline-none"
-			/>
-			<input
-				type="range"
-				bind:value={numberOfPeople}
-				min="1"
-				max="30"
-				oninput={randomizePeople}
-				class="accent-ctp-blue"
-			/>
-		</label>
-		<label for="highlighted-name"
-			>Highlighted name:
-			<input
-				list="names"
-				id="highlighted-name"
-				name="highlighted-name"
-				bind:value={highlightedName}
-				class="focus:outline-none p-2 rounded-lg border border-ctp-surface0 bg-ctp-mantle"
-			/>
-		</label>
-		<datalist id="names">
-			{#each possibleMembers as person, i (i)}
-				<option value={person.title}></option>
-			{/each}
-		</datalist>
-		<p>
-			Pool size: {poolSize} (people pulled from the
-			<a href="https://hardcore.wiki/wiki/Category:People">People category</a>
-			on the
-			<a href="https://hardcore.wiki/wiki/Hardcore_Wiki">Hardcore Wiki</a>)
-		</p>
-		<button
-			class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
-			onclick={randomizePeople}>Randomize</button
+		<div
+			class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-md border border-ctp-surface0"
 		>
+			<label class="flex items-center gap-2">
+				Number of cast members:
+				<input
+					type="number"
+					bind:value={numberOfPeople}
+					min="1"
+					max="30"
+					oninput={(event) => {
+						const currentTarget = event.currentTarget;
+
+						if (!currentTarget.value) return;
+
+						if (parseInt(currentTarget.value) > 30) {
+							currentTarget.value = '30';
+							numberOfPeople = 30;
+						}
+
+						if (parseInt(currentTarget.value) < 1) {
+							currentTarget.value = '1';
+							numberOfPeople = 1;
+						}
+
+						randomizePeople();
+					}}
+					class="border border-ctp-surface0 bg-ctp-crust rounded-lg p-2 focus:outline-none"
+				/>
+				<input
+					type="range"
+					bind:value={numberOfPeople}
+					min="1"
+					max="30"
+					oninput={randomizePeople}
+					class="accent-ctp-blue"
+				/>
+			</label>
+			<label for="highlighted-name"
+				>Highlighted name:
+				<input
+					list="names"
+					id="highlighted-name"
+					name="highlighted-name"
+					bind:value={highlightedName}
+					class="focus:outline-none p-2 rounded-lg border border-ctp-surface0 bg-ctp-crust"
+				/>
+			</label>
+			<datalist id="names">
+				{#each possibleMembers as person, i (i)}
+					<option value={person.title}></option>
+				{/each}
+			</datalist>
+			<p>
+				Pool size: {poolSize} (people pulled from the
+				<a href="https://hardcore.wiki/wiki/Category:People">People category</a>
+				on the
+				<a href="https://hardcore.wiki/wiki/Hardcore_Wiki">Hardcore Wiki</a>)
+			</p>
+			<button
+				class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
+				onclick={randomizePeople}>Randomize</button
+			>
+		</div>
 		{#if data.error}
 			<p class="text-center font-semibold text-ctp-red">{data.error}</p>
 		{:else}
@@ -220,94 +224,98 @@
 			</div>
 			<hr class="w-full" />
 			<h1 class="font-semibold text-4xl text-center">Simulator</h1>
-			<div class="flex gap-2">
-				Game:
-				{#each games as gameName, i (i)}
-					<label>
-						<input
-							type="radio"
-							name="games"
-							value={gameName}
-							bind:group={game}
-							onchange={randomizeEvents}
-							class="accent-ctp-blue"
-						/>
-						{gameName}
-					</label>
-				{/each}
+			<div
+				class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-md border border-ctp-surface0"
+			>
+				<div class="flex gap-2">
+					Game:
+					{#each games as gameName, i (i)}
+						<label>
+							<input
+								type="radio"
+								name="games"
+								value={gameName}
+								bind:group={game}
+								onchange={randomizeEvents}
+								class="accent-ctp-blue"
+							/>
+							{gameName}
+						</label>
+					{/each}
+				</div>
+				<label class="flex items-center gap-2">
+					Number of episodes:
+					<input
+						type="number"
+						bind:value={numberOfEpisodes}
+						min="1"
+						max="30"
+						oninput={(event) => {
+							const currentTarget = event.currentTarget;
+
+							if (!currentTarget.value) return;
+
+							if (parseInt(currentTarget.value) > 30) {
+								currentTarget.value = '30';
+								numberOfEpisodes = 30;
+							}
+
+							if (parseInt(currentTarget.value) < 1) {
+								currentTarget.value = '1';
+								numberOfEpisodes = 1;
+							}
+
+							randomizeEvents();
+						}}
+						class="border border-ctp-surface0 bg-ctp-crust rounded-lg p-2 focus:outline-none"
+					/>
+					<input
+						type="range"
+						bind:value={numberOfEpisodes}
+						min="1"
+						max="30"
+						oninput={randomizeEvents}
+						class="accent-ctp-blue"
+					/>
+				</label>
+				<label class="flex items-center gap-2">
+					Chances of death:
+					<input
+						type="number"
+						bind:value={odds}
+						min="0"
+						max="1"
+						step="0.01"
+						oninput={(event) => {
+							const currentTarget = event.currentTarget;
+
+							if (!currentTarget.value) return;
+
+							if (parseInt(currentTarget.value) > 1) {
+								currentTarget.value = '1';
+								odds = 1;
+							}
+
+							if (parseInt(currentTarget.value) < 0) {
+								currentTarget.value = '0';
+								odds = 0;
+							}
+
+							randomizeEvents();
+						}}
+						class="border border-ctp-surface0 bg-ctp-crust rounded-lg p-2 focus:outline-none"
+					/>
+					<input
+						type="range"
+						bind:value={odds}
+						min="0"
+						max="1"
+						step="0.01"
+						oninput={randomizeEvents}
+						class="accent-ctp-blue"
+					/>
+				</label>
 			</div>
-			<label class="flex items-center gap-2">
-				Number of episodes:
-				<input
-					type="number"
-					bind:value={numberOfEpisodes}
-					min="1"
-					max="20"
-					oninput={(event) => {
-						const currentTarget = event.currentTarget;
-
-						if (!currentTarget.value) return;
-
-						if (parseInt(currentTarget.value) > 20) {
-							currentTarget.value = '20';
-							numberOfEpisodes = 20;
-						}
-
-						if (parseInt(currentTarget.value) < 1) {
-							currentTarget.value = '1';
-							numberOfEpisodes = 1;
-						}
-
-						randomizeEvents();
-					}}
-					class="border border-ctp-surface0 bg-ctp-mantle rounded-lg p-2 focus:outline-none"
-				/>
-				<input
-					type="range"
-					bind:value={numberOfEpisodes}
-					min="1"
-					max="20"
-					oninput={randomizeEvents}
-					class="accent-ctp-blue"
-				/>
-			</label>
-			<label class="flex items-center gap-2">
-				Chances of death:
-				<input
-					type="number"
-					bind:value={odds}
-					min="0"
-					max="1"
-					step="0.01"
-					oninput={(event) => {
-						const currentTarget = event.currentTarget;
-
-						if (!currentTarget.value) return;
-
-						if (parseInt(currentTarget.value) > 1) {
-							currentTarget.value = '1';
-							odds = 1;
-						}
-
-						if (parseInt(currentTarget.value) < 0) {
-							currentTarget.value = '0';
-							odds = 0;
-						}
-
-						randomizeEvents();
-					}}
-					class="border border-ctp-surface0 bg-ctp-mantle rounded-lg p-2 focus:outline-none"
-				/>
-				<input
-					type="range"
-					bind:value={odds}
-					min="0"
-					max="1"
-					step="0.01"
-					oninput={randomizeEvents}
-					class="accent-ctp-blue"
-				/>
-			</label>
 			{#if isSimulationFinished}
 				<div class="flex flex-col text-center">
 					{#each events as event, i (i)}
