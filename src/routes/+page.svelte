@@ -4,19 +4,26 @@
 
 	let { data }: PageProps = $props();
 
-	let numberOfPeople = $state(8);
+	let numberOfPeople = $state(30);
 
 	let people: typeof data.members = $state([]);
 
-	onMount(() => {
-		const shuffledMembers = Array.from(data.members).sort(() => 0.5 - Math.random());
-		people = shuffledMembers.slice(0, numberOfPeople);
-	});
-
 	function randomizePeople() {
-		const shuffledMembers = Array.from(data.members).sort(() => 0.5 - Math.random());
-		people = shuffledMembers.slice(0, numberOfPeople);
+		const shuffledMembers = [...data.members];
+
+		for (let i = shuffledMembers.length - 1; i > 0; i--) {
+			const arrayBuffer = new Uint32Array(1);
+			crypto.getRandomValues(arrayBuffer);
+			const j = arrayBuffer[0] % (i + 1);
+			[shuffledMembers[i], shuffledMembers[j]] = [shuffledMembers[j], shuffledMembers[i]];
+		}
+
+		people = shuffledMembers.slice(0, Math.min(numberOfPeople, shuffledMembers.length));
 	}
+
+	onMount(() => {
+		randomizePeople();
+	});
 </script>
 
 <main class="flex flex-col items-center gap-2 p-4">
