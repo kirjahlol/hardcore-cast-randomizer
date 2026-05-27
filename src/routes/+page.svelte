@@ -6,7 +6,9 @@
 	let { data }: PageProps = $props();
 
 	let numberOfPeople = $state(8);
+	let highlightedName = $state('');
 
+	let possibleMembers = $derived([...data.members]);
 	let shuffledMembers: typeof data.members = $state([]);
 	let poolSize = $state(0);
 	let people: typeof data.members = $state([]);
@@ -24,12 +26,12 @@
 	}
 
 	onMount(() => {
-		shuffledMembers = [...data.members];
-
 		// Someone said not to fix Category:Groups because it was funny but someone else pointed it out and now I feel like I need to fix it
-		shuffledMembers = shuffledMembers.filter((member) => {
+		possibleMembers = possibleMembers.filter((member) => {
 			return member.title !== 'Category:Groups' && member.title !== 'User:Charity';
 		});
+
+		shuffledMembers = possibleMembers;
 
 		randomizePeople();
 	});
@@ -76,6 +78,21 @@
 				class="accent-ctp-blue"
 			/>
 		</label>
+		<label for="highlighted-name"
+			>Highlighted name:
+			<input
+				list="names"
+				id="highlighted-name"
+				name="highlighted-name"
+				bind:value={highlightedName}
+				class="focus:outline-none p-2 rounded-lg border border-ctp-surface0 bg-ctp-mantle"
+			/>
+		</label>
+		<datalist id="names">
+			{#each possibleMembers as person, i (i)}
+				<option value={person.title}></option>
+			{/each}
+		</datalist>
 		<p>
 			Pool size: {poolSize} (people pulled from the
 			<a href="https://hardcore.wiki/wiki/Category:People">People category</a>
@@ -92,11 +109,23 @@
 			<p class="text-center">Click on the name of a person to go to their wiki page.</p>
 			<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap justify-center">
 				{#each people as person, i (i)}
-					<a
-						href="https://hardcore.wiki/wiki/{encodeURIComponent(person.title.replace(/ /g, '_'))}"
-						class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-text! no-underline!"
-						><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
-					>
+					{#if person.title === highlightedName}
+						<a
+							href="https://hardcore.wiki/wiki/{encodeURIComponent(
+								person.title.replace(/ /g, '_')
+							)}"
+							class="flex size-48 items-center justify-center rounded-full border border-ctp-yellow-700 bg-ctp-yellow p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-base! no-underline!"
+							><span class="text-ctp-base/80">{i + 1}.</span>{person.title}</a
+						>
+					{:else}
+						<a
+							href="https://hardcore.wiki/wiki/{encodeURIComponent(
+								person.title.replace(/ /g, '_')
+							)}"
+							class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-text! no-underline!"
+							><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
+						>
+					{/if}
 				{/each}
 			</div>
 		{/if}
