@@ -1,9 +1,11 @@
 <script lang="ts">
+	import type { LayoutProps } from './$types';
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
 
-	let { children } = $props();
+	let { children }: LayoutProps = $props();
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<title>Hardcore Cast Randomizer</title>
+</svelte:head>
 {@render children()}
