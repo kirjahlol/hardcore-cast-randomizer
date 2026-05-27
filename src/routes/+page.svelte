@@ -39,10 +39,10 @@
 		poolSize = shuffledMembers.length;
 		people = shuffledMembers.slice(0, Math.min(numberOfPeople, shuffledMembers.length));
 
-		randomizeEvents();
+		simulateEvents();
 	}
 
-	function randomizeEvents() {
+	function simulateEvents() {
 		events = [];
 		isSimulationFinished = false;
 
@@ -302,7 +302,7 @@
 								name="games"
 								value={gameName}
 								bind:group={game}
-								onchange={randomizeEvents}
+								onchange={simulateEvents}
 								class="accent-ctp-blue"
 							/>
 							{gameName}
@@ -331,7 +331,7 @@
 								numberOfEpisodes = 1;
 							}
 
-							randomizeEvents();
+							simulateEvents();
 						}}
 						class="border border-ctp-surface0 bg-ctp-crust rounded-md p-2 focus:outline-none"
 					/>
@@ -340,7 +340,7 @@
 						bind:value={numberOfEpisodes}
 						min="1"
 						max="30"
-						oninput={randomizeEvents}
+						oninput={simulateEvents}
 						class="accent-ctp-blue"
 					/>
 				</label>
@@ -367,7 +367,7 @@
 								deathOdds = 0;
 							}
 
-							randomizeEvents();
+							simulateEvents();
 						}}
 						class="border border-ctp-surface0 bg-ctp-crust rounded-md p-2 focus:outline-none"
 					/>
@@ -377,13 +377,13 @@
 						min="0"
 						max="1"
 						step="0.01"
-						oninput={randomizeEvents}
+						oninput={simulateEvents}
 						class="accent-ctp-blue"
 					/>
 				</label>
 				<button
 					class="rounded-md bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
-					onclick={randomizeEvents}>Randomize</button
+					onclick={simulateEvents}>Simulate</button
 				>
 			</div>
 			{#if isSimulationFinished}
