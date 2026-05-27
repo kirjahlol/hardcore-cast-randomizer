@@ -289,7 +289,7 @@
 				{/each}
 			</div>
 			<hr class="w-full" />
-			<h1 class="font-semibold text-4xl text-center">Simulator</h1>
+			<h1 class="font-semibold text-4xl text-center">Hardcore Simulator</h1>
 			<div
 				class="flex flex-col items-center gap-4 p-4 bg-ctp-mantle rounded-md border border-ctp-surface0"
 			>
