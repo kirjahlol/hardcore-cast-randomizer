@@ -7,16 +7,11 @@
 
 	let numberOfPeople = $state(8);
 
+	let shuffledMembers: typeof data.members = $state([]);
+	let poolSize = $state(0);
 	let people: typeof data.members = $state([]);
 
 	function randomizePeople() {
-		let shuffledMembers = [...data.members];
-
-		// Someone said not to fix Category:Groups because it was funny but someone else pointed it out and now I feel like I need to fix it
-		shuffledMembers = shuffledMembers.filter((member) => {
-			return member.title !== 'Category:Groups' && member.title !== 'User:Charity';
-		});
-
 		for (let i = shuffledMembers.length - 1; i > 0; i--) {
 			const arrayBuffer = new Uint32Array(1);
 			crypto.getRandomValues(arrayBuffer);
@@ -24,10 +19,18 @@
 			[shuffledMembers[i], shuffledMembers[j]] = [shuffledMembers[j], shuffledMembers[i]];
 		}
 
+		poolSize = shuffledMembers.length;
 		people = shuffledMembers.slice(0, Math.min(numberOfPeople, shuffledMembers.length));
 	}
 
 	onMount(() => {
+		shuffledMembers = [...data.members];
+
+		// Someone said not to fix Category:Groups because it was funny but someone else pointed it out and now I feel like I need to fix it
+		shuffledMembers = shuffledMembers.filter((member) => {
+			return member.title !== 'Category:Groups' && member.title !== 'User:Charity';
+		});
+
 		randomizePeople();
 	});
 </script>
@@ -73,6 +76,12 @@
 				class="accent-ctp-blue"
 			/>
 		</label>
+		<p>
+			Pool size: {poolSize} (people pulled from the
+			<a href="https://hardcore.wiki/wiki/Category:People">People category</a>
+			on the
+			<a href="https://hardcore.wiki/wiki/Hardcore_Wiki">Hardcore Wiki</a>)
+		</p>
 		<button
 			class="rounded-lg bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
 			onclick={randomizePeople}>Randomize</button
@@ -82,7 +91,7 @@
 			{#each people as person, i (i)}
 				<a
 					href="https://hardcore.wiki/wiki/{encodeURIComponent(person.title.replace(/ /g, '_'))}"
-					class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center"
+					class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-text! no-underline!"
 					><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
 				>
 			{/each}

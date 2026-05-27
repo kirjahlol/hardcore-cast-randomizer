@@ -11,3 +11,7 @@
 body {
 	@apply bg-ctp-base text-ctp-text;
 }
+
+a {
+	@apply text-ctp-blue underline;
+}
