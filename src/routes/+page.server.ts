@@ -1,5 +1,5 @@
-import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	const url = 'https://hardcore.wiki/w/api.php';
