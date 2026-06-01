@@ -273,7 +273,7 @@
 		{:else}
 			<p class="text-center">Click on the name of a person to go to their wiki page.</p>
 			{#key transitionKey}
-				<div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap justify-center">
+				<div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap justify-center min-h-48">
 					{#each people as person, i (i)}
 						<div transition:fly={{ y: 20, duration: 300, delay: i * 50 }}>
 							{#if person.title === highlightedName}
