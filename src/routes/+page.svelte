@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Footer from '$components/Footer.svelte';
 	import type { PageProps } from './$types';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
+	import { fly } from 'svelte/transition';
 
 	interface Event {
 		eventType: 'progression' | 'death' | 'victory' | 'failure';
@@ -14,6 +15,8 @@
 
 	let numberOfPeople = $state(8);
 	let highlightedName = $state('');
+
+	let transitionKey = $state(0);
 
 	let possibleMembers = $derived([...data.members]);
 	let shuffledMembers: typeof data.members = $state([]);
@@ -28,7 +31,12 @@
 	let events: Event[] = $state([]);
 	let survivors: string[] = $state([]);
 
-	function randomizePeople() {
+	async function randomizePeople() {
+		people = [];
+		transitionKey++;
+
+		await tick();
+
 		for (let i = shuffledMembers.length - 1; i > 0; i--) {
 			const arrayBuffer = new Uint32Array(1);
 			crypto.getRandomValues(arrayBuffer);
@@ -258,36 +266,37 @@
 				on the
 				<a href="https://hardcore.wiki/wiki/Hardcore_Wiki">Hardcore Wiki</a>)
 			</p>
-			<button
-				class="rounded-md bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
-				onclick={randomizePeople}>Randomize</button
-			>
+			<button onclick={randomizePeople}>Randomize</button>
 		</div>
 		{#if data.error}
 			<p class="text-center font-semibold text-ctp-red">{data.error}</p>
 		{:else}
 			<p class="text-center">Click on the name of a person to go to their wiki page.</p>
-			<div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap justify-center">
-				{#each people as person, i (i)}
-					{#if person.title === highlightedName}
-						<a
-							href="https://hardcore.wiki/wiki/{encodeURIComponent(
-								person.title.replace(/ /g, '_')
-							)}"
-							class="flex size-48 items-center justify-center rounded-full border border-ctp-yellow-700 bg-ctp-yellow p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-base! no-underline!"
-							><span class="text-ctp-base/80">{i + 1}.</span>{person.title}</a
-						>
-					{:else}
-						<a
-							href="https://hardcore.wiki/wiki/{encodeURIComponent(
-								person.title.replace(/ /g, '_')
-							)}"
-							class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-text! no-underline!"
-							><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
-						>
-					{/if}
-				{/each}
-			</div>
+			{#key transitionKey}
+				<div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap justify-center">
+					{#each people as person, i (i)}
+						<div transition:fly={{ y: 20, duration: 300, delay: i * 50 }}>
+							{#if person.title === highlightedName}
+								<a
+									href="https://hardcore.wiki/wiki/{encodeURIComponent(
+										person.title.replace(/ /g, '_')
+									)}"
+									class="flex size-48 items-center justify-center rounded-full border border-ctp-yellow-700 bg-ctp-yellow p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-base! no-underline!"
+									><span class="text-ctp-base/80">{i + 1}.</span>{person.title}</a
+								>
+							{:else}
+								<a
+									href="https://hardcore.wiki/wiki/{encodeURIComponent(
+										person.title.replace(/ /g, '_')
+									)}"
+									class="flex size-48 items-center justify-center rounded-full border border-ctp-surface0 bg-ctp-mantle p-4 hover:scale-105 transition-[scale] duration-150 flex-col text-center text-ctp-text! no-underline!"
+									><span class="text-ctp-subtext0">{i + 1}.</span>{person.title}</a
+								>
+							{/if}
+						</div>
+					{/each}
+				</div>
+			{/key}
 			<hr class="w-full" />
 			<h1 class="font-semibold text-4xl text-center">Hardcore Simulator</h1>
 			<div
@@ -381,10 +390,7 @@
 						class="accent-ctp-blue"
 					/>
 				</label>
-				<button
-					class="rounded-md bg-ctp-blue py-2 px-4 text-ctp-base cursor-pointer hover:bg-ctp-blue-700"
-					onclick={simulateEvents}>Simulate</button
-				>
+				<button onclick={simulateEvents}>Simulate</button>
 			</div>
 			{#if isSimulationFinished}
 				<div class="flex flex-col text-center">

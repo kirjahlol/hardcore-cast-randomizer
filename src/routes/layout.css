@@ -13,7 +13,11 @@ body {
 }
 
 a {
-	@apply text-ctp-blue underline;
+	@apply text-ctp-blue hover:underline;
+}
+
+button {
+	@apply cursor-pointer rounded-md bg-ctp-blue px-4 py-2 text-ctp-base transition-colors duration-150 hover:bg-ctp-blue-700;
 }
 
 hr {
