@@ -393,7 +393,7 @@
 				<button onclick={simulateEvents}>Simulate</button>
 			</div>
 			{#if isSimulationFinished}
-				<div class="flex flex-col text-center">
+				<div class="flex flex-col text-center h-64 overflow-y-auto w-full max-w-lg">
 					{#each events as event, i (i)}
 						{#if event.eventType === 'death'}
 							<div>
